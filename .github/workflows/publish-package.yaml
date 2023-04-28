@@ -1,0 +1,26 @@
+name: Publish Python Package
+on:
+  push:
+    branches:
+      - main
+  
+jobs:
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup python, poetry, and dev dependencies
+        uses: ./.github/actions/setup-python
+
+      - name: Build
+        run: poetry build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }} #TODO: addd PYPI_TOKEN in projecte secrets

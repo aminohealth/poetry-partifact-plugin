@@ -1,0 +1,47 @@
+name: "Install Python and Poetry"
+description: "Add Poetry, dependency manager for Python"
+
+inputs:
+  python-version: # Dynamically set Python version
+    description: "Python version"
+    required: true
+  poetry-version: # Dynamically set Poetry version
+    description: "Poetry version"
+    required: true
+  install-deps: # Option to install Python dependencies
+    description: "Should the action install deps?"
+    required: false
+    default: false
+  only-dev-deps: # Option to install only dev dependencies
+    description: "Should the action only install the dev dependencies?"
+    required: false
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Poetry ${{ inputs.poetry-version }}
+      run: |
+        curl -sSL ${{ env.POETRY_URL }} | \
+          python - --version ${{ inputs.poetry-version }}
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+      shell: bash
+      env:
+        POETRY_URL: https://install.python-poetry.org
+
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: "poetry"
+      id: setup_python
+
+    - name: Install Dev Dependencies
+      if: ${{ inputs.install-deps == 'true' && inputs.only-dev-deps == 'true'}}
+      run: poetry install --only dev
+      shell: bash
+
+    - name: Install All Dependencies
+      if: ${{ inputs.install-deps == 'true' && inputs.only-dev-deps == 'false'}}
+      run: poetry install
+      shell: bash

@@ -2,4 +2,4 @@
 	poetry install
 
 test:
-	pytest
+	poetry run pytest --color yes

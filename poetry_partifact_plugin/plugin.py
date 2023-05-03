@@ -92,7 +92,6 @@ class PartifactPlugin(ApplicationPlugin):  # type: ignore
         try:
             profile_name = self._get_profile_name(parsed_toml)
             formatted_profile_name = profile_name.upper().replace("-", "_")
-            # TODO: figure out if local (CI variable?)
             config = Configuration.load(profile_name, profile=profile_name)
 
             # setting these env variables will allow poetry to connect to codeartifact

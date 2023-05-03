@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths: # assume to only publish package when pyproject.toml file changes
+      - pyproject.toml
   
 jobs:
   pypi-publish:
@@ -10,17 +12,36 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Check if version changed
+        id: check-version
+        run: |
+          VERSION_CHANGED=false
+          CURRENT_VERSION=$(cat pyproject.toml | grep -oP '(?<=^version = ")(.*)(?="$)')
+          PREVIOUS_VERSION=$(git show HEAD~1:pyproject.toml | grep -oP '(?<=^version = ")(.*)(?="$)')
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            VERSION_CHANGED=true
+          fi
+          echo "changed=$VERSION_CHANGED" >> $GITHUB_ENV
+          echo "changed=$VERSION_CHANGED" >> $GITHUB_OUTPUT
 
       - name: Setup python, poetry, and dev dependencies
+        if: ${{ steps.check-version.outputs.changed == 'true' }}
         uses: ./.github/actions/setup-python
 
       - name: Build
+        if: ${{ steps.check-version.outputs.changed == 'true' }}
         run: poetry build
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }} #TODO: addd PYPI_TOKEN in projecte secrets
+      # commenting out until we get offical Amino organization in PYPI
+      # - name: Publish to PyPI
+      #   if: ${{ steps.check-version.outputs.changed == 'true' }}
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.PYPI_TOKEN }} #TODO: addd PYPI_TOKEN in projecte secrets

@@ -36,7 +36,18 @@ jobs:
 
       - name: Set Python Version
         if: ${{ steps.check-version.outputs.changed == 'true' }}
-        run: echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
+        run: |
+          if [ -f .python-version ]; then
+            echo "PYTHON_VERSION=$(cat .python-version)" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Set Poetry Version
+        if: ${{ steps.check-version.outputs.changed == 'true' }}
+        run: |
+          if [ -f .poetry-version ]; then
+            echo "POETRY_VERSION=$(cat .poetry-version)" >> $GITHUB_ENV
+          fi
         shell: bash
 
       - name: Setup Python and Poetry

@@ -33,7 +33,7 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python-version }}
-        cache: "poetry"
+        cache: "poetry" # This line enables caching for Python dependencies that are managed by Poetry speeding up build times
       id: setup_python
 
     - name: Install Dev Dependencies
@@ -41,7 +41,7 @@ runs:
       run: poetry install --only dev
       shell: bash
 
-    - name: Install All Dependencies
+    - name: Install Project Dependencies
       if: ${{ inputs.install-deps == 'true' && inputs.only-dev-deps == 'false'}}
       run: poetry install
       shell: bash

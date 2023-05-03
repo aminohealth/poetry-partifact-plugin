@@ -2,7 +2,7 @@
 name = "poetry-partifact-plugin"
 version = "0.1.0"
 description = "A poetry plugin that configures AWS CodeArtifact"
-authors = ["AminoEngineers <eng@amino.com>"]
+authors = ["Amino Engineering Team <eng@amino.com>"]
 readme = "README.md"
 packages = [
     { include = "poetry_partifact_plugin" },
@@ -31,7 +31,3 @@ profile = "black"
 
 [tool.poetry.plugins."poetry.application.plugin"]
 poetry-partifact-plugin = "poetry_partifact_plugin.plugin:PartifactPlugin"
-
-[virtualenvs]
-create = true
-in-project = true

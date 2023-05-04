@@ -62,7 +62,7 @@ def test_set_env_vars(mocker, correct_parsed_pyproject_toml):
     assert os.getenv("POETRY_HTTP_BASIC_MY_SOURCE_NAME_USERNAME") == "aws"
 
     mocked_config.assert_called_once_with("my_source_name", profile="my_source_name")
-
+    mocked_get_token.assert_called_once_with(mocked_config.return_value)
 
 def test_set_env_vars_no_profile_name(parsed_pyproject_toml_no_name):
     """Should raise an Exception when trying to set env vars for an invalid pyproject.toml file."""

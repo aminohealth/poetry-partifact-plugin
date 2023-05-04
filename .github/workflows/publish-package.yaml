@@ -27,8 +27,12 @@ jobs:
         run: |
           VERSION_CHANGED=false
           CURRENT_VERSION=$(cat pyproject.toml | grep -oP '(?<=^version = ")(.*)(?="$)')
-          PREVIOUS_VERSION=$(git show HEAD~1:pyproject.toml | grep -oP '(?<=^version = ")(.*)(?="$)')
-          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+          if git show HEAD~1:pyproject.toml 2> /dev/null; then
+            PREVIOUS_VERSION=$(git show HEAD~1:pyproject.toml | grep -oP '(?<=^version = ")(.*)(?="$)')
+            if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+              VERSION_CHANGED=true
+            fi
+          else
             VERSION_CHANGED=true
           fi
           echo "changed=$VERSION_CHANGED" >> $GITHUB_ENV

@@ -67,7 +67,7 @@ jobs:
         if: ${{ steps.check-version.outputs.changed == 'true' }}
         run: poetry build
 
-      # TODO: switch to official Amino Pypi account (using tim.estes@briq.com's right now)
+      # TODO: switch to official Amino Pypi account
       - name: Publish to PyPI
         if: ${{ steps.check-version.outputs.changed == 'true' }}
         uses: pypa/gh-action-pypi-publish@release/v1

@@ -67,10 +67,7 @@ jobs:
         if: ${{ steps.check-version.outputs.changed == 'true' }}
         run: poetry build
 
-      # commenting out until we get offical Amino organization in PYPI
-      # - name: Publish to PyPI
-      #   if: ${{ steps.check-version.outputs.changed == 'true' }}
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     user: __token__
-      #     password: ${{ secrets.PYPI_TOKEN }} #TODO: addd PYPI_TOKEN in projecte secrets
+      # TODO: switch to official Amino Pypi account
+      - name: Publish to PyPI
+        if: ${{ steps.check-version.outputs.changed == 'true' }}
+        uses: pypa/gh-action-pypi-publish@release/v1

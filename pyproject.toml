@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poetry-partifact-plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "A poetry plugin that configures AWS CodeArtifact"
 authors = ["Amino Engineering Team <eng@amino.com>"]
 readme = "README.md"
